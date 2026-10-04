@@ -47,7 +47,7 @@ else warn "Falló git por SSH: ejecuta 'gh auth login' eligiendo SSH, o agrega t
 step "6/6 Sesión de Google (gws)"
 if [[ ! -f "$GWS_DIR/client_secret.json" ]]; then
   warn "Falta $GWS_DIR/client_secret.json (cliente OAuth compartido de Blacksip)."
-  echo "     Descárgalo del lugar donde lo compartió Jose Ochoa (no está en el repo a propósito)."
+  echo "     Está en 1Password: bóveda \"Tech Managers\", ítem \"gws – client_secret.json (Blacksip)\". Descarga el archivo adjunto (no está en el repo a propósito)."
   read -r -p "  Ruta del archivo descargado (arrástralo aquí, o Enter para salir): " src
   src="${src//\\ / }"; src="${src%\"}"; src="${src#\"}"; src="${src%\'}"; src="${src#\'}"; src="${src/#\~/$HOME}"
   [[ -f "$src" ]] || die "No encontré el archivo. Descárgalo y vuelve a ejecutar este script."
