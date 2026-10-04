@@ -37,7 +37,7 @@ Marketplace de plugins de Claude Code para los Tech Managers de Blacksip.
 
 ## Cómo contribuir
 
-`main` está protegida: todo cambio entra por pull request con al menos 1 aprobación.
+`main` está protegida: todo cambio entra por pull request con al menos 1 aprobación de un code owner. `.github/CODEOWNERS` asigna todo el repo a `@blacksip/tech-managers`, así que cualquier Tech Manager (distinto del autor del PR) puede aprobar. Para que una skill requiera un revisor específico, agrega una línea en `CODEOWNERS` (`/plugins/<plugin>/ @usuario`).
 
 1. Crea una rama desde `main` (`feat/<skill>` o `fix/<skill>`).
 2. Agrega o edita la skill en `plugins/<plugin>/skills/<nombre>/SKILL.md`. Si es un plugin nuevo, regístralo en `.claude-plugin/marketplace.json`.
