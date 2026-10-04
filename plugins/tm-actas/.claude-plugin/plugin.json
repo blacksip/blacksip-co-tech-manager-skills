@@ -1,0 +1,5 @@
+{
+  "name": "tm-actas",
+  "version": "1.0.0",
+  "description": "Skills para crear actas de reunión BlackSip (crear-acta-md, acta-md-to-google-docs)"
+}

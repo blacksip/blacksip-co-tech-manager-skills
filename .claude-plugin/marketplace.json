@@ -1,0 +1,11 @@
+{
+  "name": "blacksip-co-tech-manager-skills",
+  "owner": { "name": "Blacksip Tech Managers" },
+  "plugins": [
+    {
+      "name": "tm-actas",
+      "source": "./plugins/tm-actas",
+      "description": "Actas de reunión BlackSip: crear el acta en Markdown y pasarla a Google Docs"
+    }
+  ]
+}
