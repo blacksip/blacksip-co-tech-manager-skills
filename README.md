@@ -10,7 +10,7 @@ El marketplace es privado y se clona por SSH, así que `gh` (GitHub CLI) debe es
 brew install gh && { gh api user >/dev/null 2>&1 || gh auth login; } && bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/setup.sh -H "Accept: application/vnd.github.raw")
 ```
 
-Si no tienes Homebrew, instálalo primero desde https://brew.sh. En `gh auth login` elige **GitHub.com → SSH**. El script `scripts/setup.sh` te guía para dejar listos `gh`, Node.js, Python 3 y `gws` (con tu sesión de Google) y verifica el acceso al repo y a la plantilla de acta; puedes volver a ejecutarlo cuando quieras (no repite lo ya instalado).
+Si no tienes Homebrew, instálalo primero desde https://brew.sh. En `gh auth login` elige **GitHub.com → SSH**. El script `scripts/setup.sh` te guía para dejar listos `gh`, Node.js, Python 3 y `gws` (con tu sesión de Google y el `client_secret.json` compartido del equipo, que no está en este repo; pídelo a Jose Ochoa) y verifica el acceso al repo y a la plantilla de acta; puedes volver a ejecutarlo cuando quieras (no repite lo ya instalado).
 
 ## Instalar
 

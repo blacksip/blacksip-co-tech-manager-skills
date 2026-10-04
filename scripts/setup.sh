@@ -46,11 +46,13 @@ else warn "Falló git por SSH: ejecuta 'gh auth login' eligiendo SSH, o agrega t
 
 step "6/6 Sesión de Google (gws)"
 if [[ ! -f "$GWS_DIR/client_secret.json" ]]; then
-  warn "Falta $GWS_DIR/client_secret.json (cliente OAuth de Google)."
-  echo "     Opción A: copia aquí el client_secret.json que comparte el equipo (pídelo a Jose Ochoa por canal seguro)."
-  echo "     Opción B: crea el tuyo con 'gws auth setup' (requiere gcloud: brew install --cask google-cloud-sdk)."
-  if ask "Ejecutar 'gws auth setup' ahora (opción B)?"; then gws auth setup || die "gws auth setup falló"
-  else mkdir -p "$GWS_DIR"; echo "     Copia el archivo a $GWS_DIR/client_secret.json y vuelve a ejecutar este script."; exit 1; fi
+  warn "Falta $GWS_DIR/client_secret.json (cliente OAuth compartido de Blacksip)."
+  echo "     Descárgalo del lugar donde lo compartió Jose Ochoa (no está en el repo a propósito)."
+  read -r -p "  Ruta del archivo descargado (arrástralo aquí, o Enter para salir): " src
+  src="${src//\\ / }"; src="${src%\"}"; src="${src#\"}"; src="${src%\'}"; src="${src#\'}"; src="${src/#\~/$HOME}"
+  [[ -f "$src" ]] || die "No encontré el archivo. Descárgalo y vuelve a ejecutar este script."
+  grep -q '"installed"' "$src" || die "Ese archivo no parece un client_secret.json de tipo escritorio."
+  mkdir -p "$GWS_DIR" && cp "$src" "$GWS_DIR/client_secret.json" && chmod 600 "$GWS_DIR/client_secret.json" && ok "client_secret.json instalado"
 fi
 if gws auth status 2>/dev/null | grep -q '"has_refresh_token": true'; then ok "gws ya tiene sesión"
 else
