@@ -25,6 +25,16 @@ Si no tienes Homebrew, instálalo primero desde https://brew.sh. En `gh auth log
 /plugin marketplace update blacksip-co-tech-manager-skills
 ```
 
+## Usar en opencode (sin Claude Code)
+
+Opcional si ya usas el plugin en Claude Code. Para instalar las skills en opencode sin tener Claude Code, primero deja listo `gh` con SSH (ver "Antes de instalar") y luego ejecuta:
+
+```bash
+bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/install-opencode.sh -H "Accept: application/vnd.github.raw")
+```
+
+Clona este repo en `~/.local/share/blacksip-co-tech-manager-skills` y copia las skills a `~/.config/opencode/skills/`. Para actualizar, vuelve a ejecutar el mismo comando y reinicia opencode. Después ejecuta `scripts/setup.sh` desde esa carpeta para los requisitos (`gws`, sesión de Google) y configura el MCP de Granola en `opencode.json`.
+
 ## Plugins
 
 | Plugin | Skills |
