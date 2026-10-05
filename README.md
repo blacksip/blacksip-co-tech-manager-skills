@@ -108,7 +108,14 @@ Abre Claude Code y ejecuta:
 
 Reinicia Claude Code. Las skills quedan disponibles en todos tus proyectos (instalación a nivel de usuario).
 
-- **Actualizar:** `/plugin marketplace update blacksip-co-tech-manager-skills` (también puedes activar la actualización automática del marketplace desde `/plugin`).
+- **Actualizar** (dos comandos y reiniciar Claude Code; el primero solo refresca el catálogo, no actualiza el plugin instalado):
+
+  ```
+  /plugin marketplace update blacksip-co-tech-manager-skills
+  /plugin update tm-actas@blacksip-co-tech-manager-skills
+  ```
+
+  También puedes activar la actualización automática del marketplace desde `/plugin`.
 - **Desinstalar:** `/plugin uninstall tm-actas@blacksip-co-tech-manager-skills` y `/plugin marketplace remove blacksip-co-tech-manager-skills`.
 
 #### opencode
@@ -139,7 +146,14 @@ Necesitas Claude Code instalado dentro de Ubuntu. Ábrelo y ejecuta:
 
 Reinicia Claude Code. Las skills quedan disponibles en todos tus proyectos (instalación a nivel de usuario).
 
-- **Actualizar:** `/plugin marketplace update blacksip-co-tech-manager-skills` (también puedes activar la actualización automática del marketplace desde `/plugin`).
+- **Actualizar** (dos comandos y reiniciar Claude Code; el primero solo refresca el catálogo, no actualiza el plugin instalado):
+
+  ```
+  /plugin marketplace update blacksip-co-tech-manager-skills
+  /plugin update tm-actas@blacksip-co-tech-manager-skills
+  ```
+
+  También puedes activar la actualización automática del marketplace desde `/plugin`.
 - **Desinstalar:** `/plugin uninstall tm-actas@blacksip-co-tech-manager-skills` y `/plugin marketplace remove blacksip-co-tech-manager-skills`.
 
 #### opencode
@@ -250,7 +264,7 @@ Imprime la URL del documento. Cada ejecución crea un documento nuevo en Drive.
 3. Sube `version` en el `plugin.json` del plugin afectado.
 4. Revisa que no haya datos reales de clientes (nombres, emails, cifras) y que las rutas sean relativas a la carpeta de la skill.
 5. Abre el PR y pide revisión a otro Tech Manager.
-6. Tras el merge, cada persona actualiza: Claude Code con `/plugin marketplace update blacksip-co-tech-manager-skills`, opencode volviendo a ejecutar el instalador.
+6. Tras el merge, cada persona actualiza: Claude Code con `/plugin marketplace update blacksip-co-tech-manager-skills` y luego `/plugin update tm-actas@blacksip-co-tech-manager-skills` (y reiniciar), opencode volviendo a ejecutar el instalador.
 
 ## Rotar el client_secret.json
 
