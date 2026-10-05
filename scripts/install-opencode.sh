@@ -5,7 +5,9 @@ set -eu
 
 REPO_URL="git@github.com:blacksip/blacksip-co-tech-manager-skills.git"
 CLONE_DIR="${CLONE_DIR:-$HOME/.local/share/blacksip-co-tech-manager-skills}"
-SKILLS_DIR="${OPENCODE_SKILLS_DIR:-${XDG_CONFIG_HOME:-$HOME/.config}/opencode/skills}"
+OC_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
+SKILLS_DIR="${OPENCODE_SKILLS_DIR:-$OC_DIR/skills}"
+COMMANDS_DIR="${OPENCODE_COMMANDS_DIR:-$OC_DIR/commands}"
 
 ok()   { printf '  \033[32m✔\033[0m %s\n' "$*"; }
 warn() { printf '  \033[33m!\033[0m %s\n' "$*"; }
@@ -22,14 +24,27 @@ else
   ok "repositorio clonado en $CLONE_DIR"
 fi
 
-printf '\n\033[1m2/3 Copiando skills a %s\033[0m\n' "$SKILLS_DIR"
-mkdir -p "$SKILLS_DIR"
+printf '\n\033[1m2/3 Copiando skills a %s y comandos a %s\033[0m\n' "$SKILLS_DIR" "$COMMANDS_DIR"
+mkdir -p "$SKILLS_DIR" "$COMMANDS_DIR"
 n=0
 for d in "$CLONE_DIR"/plugins/*/skills/*/; do
   [[ -f "$d/SKILL.md" ]] || continue
   name="$(basename "$d")"
   rm -rf "${SKILLS_DIR:?}/$name" && cp -R "${d%/}" "$SKILLS_DIR/$name"
-  ok "$name"; n=$((n+1))
+  case "$name" in
+    crear-acta-md)          desc="Crear un acta de reunión BlackSip en Markdown desde notas (Granola, Gemini o texto)" ;;
+    acta-md-to-google-docs) desc="Pasar un acta .md a Google Docs usando la plantilla de BlackSip" ;;
+    *)                      desc="Skill de Blacksip: $name" ;;
+  esac
+  cat > "$COMMANDS_DIR/tm-actas-$name.md" <<CMD
+---
+description: $desc
+---
+Usa la skill \`$name\` (herramienta skill) para atender esta solicitud y sigue sus instrucciones al pie de la letra.
+
+Entrada del usuario: \$ARGUMENTS
+CMD
+  ok "$name  →  /tm-actas-$name"; n=$((n+1))
 done
 [[ $n -gt 0 ]] || die "No se encontró ninguna skill en el repositorio."
 
@@ -39,7 +54,7 @@ command -v opencode >/dev/null && ok "opencode $(opencode --version 2>/dev/null 
 
 cat <<MSG
 
-Listo: $n skills instaladas. Reinicia opencode para que las detecte.
+Listo: $n skills instaladas, con sus comandos /tm-actas-*. Reinicia opencode para que los detecte.
 
 Pendiente (una sola vez):
   - Requisitos (gh, gws, sesión de Google): bash "$CLONE_DIR/scripts/setup.sh"
