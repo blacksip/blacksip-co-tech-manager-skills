@@ -26,6 +26,7 @@ fi
 
 printf '\n\033[1m2/3 Copiando skills a %s y comandos a %s\033[0m\n' "$SKILLS_DIR" "$COMMANDS_DIR"
 mkdir -p "$SKILLS_DIR" "$COMMANDS_DIR"
+rm -f "$COMMANDS_DIR"/tm-actas-*.md   # nombres antiguos (con guion)
 n=0
 for d in "$CLONE_DIR"/plugins/*/skills/*/; do
   [[ -f "$d/SKILL.md" ]] || continue
@@ -36,7 +37,7 @@ for d in "$CLONE_DIR"/plugins/*/skills/*/; do
     acta-md-to-google-docs) desc="Pasar un acta .md a Google Docs usando la plantilla de BlackSip" ;;
     *)                      desc="Skill de Blacksip: $name" ;;
   esac
-  cat > "$COMMANDS_DIR/tm-actas-$name.md" <<CMD
+  cat > "$COMMANDS_DIR/tm-actas:$name.md" <<CMD
 ---
 description: $desc
 ---
@@ -44,7 +45,7 @@ Usa la skill \`$name\` (herramienta skill) para atender esta solicitud y sigue s
 
 Entrada del usuario: \$ARGUMENTS
 CMD
-  ok "$name  →  /tm-actas-$name"; n=$((n+1))
+  ok "$name  →  /tm-actas:$name"; n=$((n+1))
 done
 [[ $n -gt 0 ]] || die "No se encontró ninguna skill en el repositorio."
 
@@ -54,7 +55,7 @@ command -v opencode >/dev/null && ok "opencode $(opencode --version 2>/dev/null 
 
 cat <<MSG
 
-Listo: $n skills instaladas, con sus comandos /tm-actas-*. Reinicia opencode para que los detecte.
+Listo: $n skills instaladas, con sus comandos /tm-actas:*. Reinicia opencode para que los detecte.
 
 Pendiente (una sola vez):
   - Requisitos (gh, gws, sesión de Google): bash "$CLONE_DIR/scripts/setup.sh"

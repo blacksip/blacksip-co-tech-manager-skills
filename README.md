@@ -33,7 +33,7 @@ Opcional si ya usas el plugin en Claude Code. Para instalar las skills en openco
 bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/install-opencode.sh -H "Accept: application/vnd.github.raw")
 ```
 
-Clona este repo en `~/.local/share/blacksip-co-tech-manager-skills` y copia las skills a `~/.config/opencode/skills/`. Además crea un comando por skill en `~/.config/opencode/commands/`, todos con el prefijo `tm-actas-`: `/tm-actas-crear-acta-md` y `/tm-actas-acta-md-to-google-docs` (acepta argumentos, p. ej. `/tm-actas-crear-acta-md <enlace de Granola>`). Para actualizar, vuelve a ejecutar el mismo comando y reinicia opencode. Después ejecuta `scripts/setup.sh` desde esa carpeta para los requisitos (`gws`, sesión de Google) y configura el MCP de Granola en `opencode.json`.
+Clona este repo en `~/.local/share/blacksip-co-tech-manager-skills` y copia las skills a `~/.config/opencode/skills/`. Además crea un comando por skill en `~/.config/opencode/commands/`, todos con el prefijo `tm-actas:` (los dos puntos no son válidos en nombres de archivo de Windows; el script es para macOS/Linux): `/tm-actas:crear-acta-md` y `/tm-actas:acta-md-to-google-docs` (acepta argumentos, p. ej. `/tm-actas:crear-acta-md <enlace de Granola>`). Para actualizar, vuelve a ejecutar el mismo comando y reinicia opencode. Después ejecuta `scripts/setup.sh` desde esa carpeta para los requisitos (`gws`, sesión de Google) y configura el MCP de Granola en `opencode.json`.
 
 ## Plugins
 
