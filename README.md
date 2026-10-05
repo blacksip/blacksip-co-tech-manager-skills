@@ -9,14 +9,14 @@ Skills compartidas de los Tech Managers de Blacksip. Funcionan en **Claude Code*
 
 ## Elige tu camino
 
-La instalación tiene 3 pasos. Los pasos 1 y 3 son comunes; el paso 2 depende de qué cliente usas.
+La instalación tiene 3 pasos. Los pasos 1 y 3 son comunes; el paso 2 depende de tu sistema y de qué cliente usas.
 
 | | Claude Code | opencode (sin Claude Code) |
 | :-- | :-- | :-- |
-| **macOS** | Paso 1 macOS → Paso 2A | Paso 1 macOS → Paso 2B |
-| **Windows** | Paso 1 Windows (WSL2) → Paso 2A dentro de WSL | Paso 1 Windows (WSL2) → Paso 2B dentro de WSL |
+| **macOS** | Paso 1 macOS → Paso 2 macOS, Claude Code | Paso 1 macOS → Paso 2 macOS, opencode |
+| **Windows** | Paso 1 Windows (WSL2) → Paso 2 Windows, Claude Code | Paso 1 Windows (WSL2) → Paso 2 Windows, opencode |
 
-Si usas **los dos clientes**, haz el paso 1 una sola vez y luego el 2A y el 2B.
+Si usas **los dos clientes**, haz el paso 1 una sola vez y luego los dos apartados del paso 2.
 
 > **Windows:** los scripts son de bash y solo están probados en macOS. En Windows todo se ejecuta dentro de **WSL2 (Ubuntu)**, incluido Claude Code u opencode.
 
@@ -91,7 +91,13 @@ Alternativa sin WSL (PowerShell nativo): `winget install GitHub.cli Python.Pytho
 
 ---
 
-## Paso 2A. Instalar en Claude Code
+## Paso 2. Instalar las skills
+
+Elige tu sistema y tu cliente. Si usas los dos clientes, haz los dos apartados.
+
+### macOS
+
+#### Claude Code
 
 Abre Claude Code y ejecuta:
 
@@ -102,42 +108,52 @@ Abre Claude Code y ejecuta:
 
 Reinicia Claude Code. Las skills quedan disponibles en todos tus proyectos (instalación a nivel de usuario).
 
-**Actualizar:**
+- **Actualizar:** `/plugin marketplace update blacksip-co-tech-manager-skills` (también puedes activar la actualización automática del marketplace desde `/plugin`).
+- **Desinstalar:** `/plugin uninstall tm-actas@blacksip-co-tech-manager-skills` y `/plugin marketplace remove blacksip-co-tech-manager-skills`.
 
-```
-/plugin marketplace update blacksip-co-tech-manager-skills
-```
+#### opencode
 
-También puedes activar la actualización automática del marketplace desde `/plugin`.
-
-**Desinstalar:**
-
-```
-/plugin uninstall tm-actas@blacksip-co-tech-manager-skills
-/plugin marketplace remove blacksip-co-tech-manager-skills
-```
-
----
-
-## Paso 2B. Instalar en opencode (sin Claude Code)
-
-En macOS, en una terminal. En Windows, dentro de Ubuntu (WSL). Necesitas opencode instalado: `curl -fsSL https://opencode.ai/install | bash`. Luego:
+Necesitas opencode instalado: `curl -fsSL https://opencode.ai/install | bash`. Luego, en la terminal:
 
 ```bash
 bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/install-opencode.sh -H "Accept: application/vnd.github.raw")
 ```
 
-El script:
+El script clona este repo en `~/.local/share/blacksip-co-tech-manager-skills`, copia las skills a `~/.config/opencode/skills/` y crea un comando por skill en `~/.config/opencode/commands/` con el prefijo `tm-actas:`. Reinicia opencode.
 
-- clona este repo en `~/.local/share/blacksip-co-tech-manager-skills`;
-- copia las skills a `~/.config/opencode/skills/`;
-- crea un comando por skill en `~/.config/opencode/commands/` con el prefijo `tm-actas:` (los dos puntos no son válidos en nombres de archivo de Windows nativo, por eso es para macOS/Linux/WSL).
+- **Actualizar:** vuelve a ejecutar el mismo comando y reinicia opencode.
+- **Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
 
-Reinicia opencode.
+### Windows (WSL2)
 
-**Actualizar:** vuelve a ejecutar el mismo comando y reinicia opencode.
+Todo se hace dentro de **Ubuntu (WSL)**, no en PowerShell. Los comandos son los mismos que en macOS.
 
-**Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
+#### Claude Code
+
+Necesitas Claude Code instalado dentro de Ubuntu. Ábrelo y ejecuta:
+
+```
+/plugin marketplace add blacksip/blacksip-co-tech-manager-skills
+/plugin install tm-actas@blacksip-co-tech-manager-skills
+```
+
+Reinicia Claude Code. Las skills quedan disponibles en todos tus proyectos (instalación a nivel de usuario).
+
+- **Actualizar:** `/plugin marketplace update blacksip-co-tech-manager-skills` (también puedes activar la actualización automática del marketplace desde `/plugin`).
+- **Desinstalar:** `/plugin uninstall tm-actas@blacksip-co-tech-manager-skills` y `/plugin marketplace remove blacksip-co-tech-manager-skills`.
+
+#### opencode
+
+Necesitas opencode instalado: `curl -fsSL https://opencode.ai/install | bash`. Luego, en la terminal:
+
+```bash
+bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/install-opencode.sh -H "Accept: application/vnd.github.raw")
+```
+
+El script clona este repo en `~/.local/share/blacksip-co-tech-manager-skills`, copia las skills a `~/.config/opencode/skills/` y crea un comando por skill en `~/.config/opencode/commands/` con el prefijo `tm-actas:`. Reinicia opencode.
+
+- **Actualizar:** vuelve a ejecutar el mismo comando y reinicia opencode.
+- **Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
 
 ---
 
