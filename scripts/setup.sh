@@ -12,7 +12,7 @@ step() { printf '\n\033[1m%s\033[0m\n' "$*"; }
 ask()  { read -r -p "  $1 [s/N] " a; [[ "$a" =~ ^[sSyY]$ ]]; }
 die()  { printf '  \033[31m✘\033[0m %s\n' "$*"; exit 1; }
 
-[[ "$(uname)" == "Darwin" ]] || die "Este script solo cubre macOS. En Linux/Windows instala gh, Node.js, Python 3 y 'npm i -g @googleworkspace/cli' a mano y ejecuta 'gh auth login' y 'gws auth login'."
+[[ "$(uname)" == "Darwin" ]] || die "Este script solo cubre macOS. En Linux o Windows (WSL) sigue la sección Windows del README."
 
 step "1/6 Homebrew"
 if command -v brew >/dev/null; then ok "brew instalado"
@@ -63,8 +63,8 @@ if gws drive files get --params "{\"fileId\":\"$TEMPLATE_ID\",\"supportsAllDrive
 then ok "acceso a la plantilla de acta en Drive"
 else warn "No se pudo leer la plantilla de acta en Drive: pide acceso a la carpeta 'Template' o reintenta 'gws auth login'."; fi
 
-step "Listo"
-echo "  Claude Code: instala el plugin dentro de Claude Code:"
-echo "    /plugin marketplace add blacksip/blacksip-co-tech-manager-skills"
-echo "    /plugin install tm-actas@blacksip-co-tech-manager-skills"
-echo "  opencode (sin Claude Code): bash scripts/install-opencode.sh"
+step "Requisitos listos"
+echo "  Siguiente paso: instalar las skills (paso 2 del README):"
+echo "    Claude Code: abre Claude Code y ejecuta /plugin marketplace add blacksip/blacksip-co-tech-manager-skills"
+echo "                 y luego /plugin install tm-actas@blacksip-co-tech-manager-skills"
+echo "    opencode:    bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/install-opencode.sh -H \"Accept: application/vnd.github.raw\")"
