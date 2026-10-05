@@ -25,15 +25,44 @@ Si no tienes Homebrew, instálalo primero desde https://brew.sh. En `gh auth log
 /plugin marketplace update blacksip-co-tech-manager-skills
 ```
 
-## Usar en opencode (sin Claude Code)
+## Instalar en opencode (sin Claude Code)
 
-Opcional si ya usas el plugin en Claude Code. Para instalar las skills en opencode sin tener Claude Code, primero deja listo `gh` con SSH (ver "Antes de instalar") y luego ejecuta:
+Para quien usa opencode en lugar de Claude Code (o además de él). Solo macOS/Linux.
+
+**1. Requisitos previos (una sola vez).** `gh` con sesión y SSH, igual que en "Antes de instalar" (si ya ejecutaste ese comando, salta al paso 2). Necesitas además opencode instalado: `curl -fsSL https://opencode.ai/install | bash`.
+
+**2. Instalar.** En una terminal:
 
 ```bash
 bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/install-opencode.sh -H "Accept: application/vnd.github.raw")
 ```
 
-Clona este repo en `~/.local/share/blacksip-co-tech-manager-skills` y copia las skills a `~/.config/opencode/skills/`. Además crea un comando por skill en `~/.config/opencode/commands/`, todos con el prefijo `tm-actas:` (los dos puntos no son válidos en nombres de archivo de Windows; el script es para macOS/Linux): `/tm-actas:crear-acta-md` y `/tm-actas:acta-md-to-google-docs` (acepta argumentos, p. ej. `/tm-actas:crear-acta-md <enlace de Granola>`). Para actualizar, vuelve a ejecutar el mismo comando y reinicia opencode. Después ejecuta `scripts/setup.sh` desde esa carpeta para los requisitos (`gws`, sesión de Google) y configura el MCP de Granola en `opencode.json`.
+Clona este repo en `~/.local/share/blacksip-co-tech-manager-skills`, copia las skills a `~/.config/opencode/skills/` y crea un comando por skill en `~/.config/opencode/commands/`.
+
+**3. Reiniciar opencode** y escribir `/tm-actas:` para ver los comandos:
+
+| Comando | Qué hace |
+| :-- | :-- |
+| `/tm-actas:crear-acta-md <notas o enlace>` | Crea el acta en Markdown (`actas/YYYYMMDD-acta-<tema>.md`) |
+| `/tm-actas:acta-md-to-google-docs <acta.md>` | Pasa el acta a Google Docs con la plantilla de BlackSip |
+
+**4. Requisitos de las skills (una sola vez).** Ejecuta `bash ~/.local/share/blacksip-co-tech-manager-skills/scripts/setup.sh` para dejar listos `gws`, la sesión de Google y el `client_secret.json` (1Password, bóveda `Technology - TechManagers`).
+
+**5. MCP de Granola** (para leer notas de reunión). Agrégalo en `~/.config/opencode/opencode.json` (o `.jsonc`) y autoriza con `opencode mcp auth granola`:
+
+```json
+{
+  "mcp": {
+    "granola": { "type": "remote", "url": "https://mcp.granola.ai/mcp" }
+  }
+}
+```
+
+Si no lo configuras, `crear-acta-md` funciona pegándole el texto de las notas.
+
+**Actualizar:** vuelve a ejecutar el comando del paso 2 y reinicia opencode. **Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
+
+Los dos puntos de `tm-actas:` no son válidos en nombres de archivo de Windows, por eso el script es solo para macOS/Linux.
 
 ## Plugins
 
