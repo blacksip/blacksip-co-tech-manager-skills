@@ -179,17 +179,9 @@ opencode mcp auth granola
 opencode mcp list
 ```
 
-`opencode mcp auth` abre el navegador para autorizar con tu cuenta de Granola, y `opencode mcp list` debe mostrar `granola` conectado. Si prefieres editar el archivo a mano, agrega esto en `~/.config/opencode/opencode.json` (o `.jsonc`) y luego ejecuta `opencode mcp auth granola`:
+`opencode mcp auth` abre el navegador para autorizar con tu cuenta de Granola, y `opencode mcp list` debe mostrar `granola` conectado.
 
-```json
-{
-  "mcp": {
-    "granola": { "type": "remote", "url": "https://mcp.granola.ai/mcp" }
-  }
-}
-```
-
-Si `granola` ya existe en tu configuración, `add` avisa o lo repite; revisa con `list` antes de agregarlo. Para quitarlo: `claude mcp remove granola` o `opencode mcp logout granola` (borra la autorización).
+Para quitarlo: `claude mcp remove granola` o `opencode mcp logout granola` (borra la autorización).
 
 **Verifica la instalación** abriendo una sesión nueva:
 
