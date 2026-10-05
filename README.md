@@ -40,7 +40,26 @@ Si no tienes Homebrew, instálalo desde https://brew.sh. Luego, en una terminal:
 brew install gh && { gh api user >/dev/null 2>&1 || gh auth login; } && bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/setup.sh -H "Accept: application/vnd.github.raw")
 ```
 
-`scripts/setup.sh` te guía para dejar listos `gh`, Node.js, Python 3 y `gws`. Cuando pida el `client_secret.json`, descárgalo de 1Password y arrastra el archivo a la terminal. Al final verifica el acceso al repo, por SSH y a la plantilla de acta. Puedes volver a ejecutarlo cuando quieras: no repite lo ya instalado.
+Ese comando instala `gh` y ejecuta `scripts/setup.sh`, que revisa e instala (pidiendo confirmación en cada caso) lo siguiente:
+
+| Herramienta | Para qué sirve | Cómo la instala |
+| :-- | :-- | :-- |
+| `gh` (GitHub CLI) | Descargar este repo privado y autenticarte por SSH | `brew install gh` |
+| Node.js | Instalar `gws` | `brew install node` |
+| Python 3 | Ejecutar `md_to_gdoc.py` | `brew install python` |
+| `gws` (Google Workspace CLI) | Leer y escribir en Drive y Docs desde las skills | `npm install -g @googleworkspace/cli` |
+
+Después inicia sesión en Google (`gws auth login -s drive,docs`, con tu cuenta `@blacksip.com`). Cuando el script pida el `client_secret.json`, descárgalo de 1Password y arrastra el archivo a la terminal. Al final verifica el acceso al repo, por SSH y a la plantilla de acta. **No instala el plugin ni las skills:** eso es el paso 2. Puedes volver a ejecutarlo cuando quieras: no repite lo ya instalado.
+
+**Instalar `gws` a mano** (si prefieres no usar el script):
+
+```bash
+npm install -g @googleworkspace/cli
+mkdir -p ~/.config/gws && cp ~/Downloads/client_secret.json ~/.config/gws/ && chmod 600 ~/.config/gws/client_secret.json
+gws auth login -s drive,docs
+```
+
+Comprueba que quedó bien con `gws --version` y `gws auth status` (debe mostrar `"has_refresh_token": true`).
 
 ### Windows (WSL2)
 
