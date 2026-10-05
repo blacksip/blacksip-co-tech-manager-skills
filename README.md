@@ -145,7 +145,7 @@ Reinicia opencode.
 
 **Granola** (para leer las notas de reunión). Sin él, `crear-acta-md` funciona igual si le pegas el texto de las notas.
 
-- **Claude Code:** conéctalo desde los conectores de la app de Claude, o con `claude mcp add --transport http granola https://mcp.granola.ai/mcp`.
+- **Claude Code:** conéctalo desde los conectores de la app de Claude, o con `claude mcp add --scope user --transport http granola https://mcp.granola.ai/mcp` (`--scope user` lo deja disponible en todos tus proyectos; sin él solo queda en el proyecto actual).
 - **opencode:** agrégalo en `~/.config/opencode/opencode.json` (o `.jsonc`) y autoriza con `opencode mcp auth granola`:
 
   ```json
@@ -155,8 +155,6 @@ Reinicia opencode.
     }
   }
   ```
-
-La URL del MCP de Granola no se ha verificado: confírmala en la configuración de integraciones de Granola y corrígela aquí si es distinta.
 
 **Verifica la instalación** abriendo una sesión nueva:
 
