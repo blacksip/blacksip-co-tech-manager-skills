@@ -159,18 +159,37 @@ El script clona este repo en `~/.local/share/blacksip-co-tech-manager-skills`, c
 
 ## Paso 3. Conectar Granola y verificar
 
-**Granola** (para leer las notas de reunión). Sin él, `crear-acta-md` funciona igual si le pegas el texto de las notas.
+**Granola** (para leer las notas de reunión). Se conecta con comandos de terminal, en macOS y en Ubuntu (WSL). Sin Granola, `crear-acta-md` funciona igual si le pegas el texto de las notas.
 
-- **Claude Code:** conéctalo desde los conectores de la app de Claude, o con `claude mcp add --scope user --transport http granola https://mcp.granola.ai/mcp` (`--scope user` lo deja disponible en todos tus proyectos; sin él solo queda en el proyecto actual).
-- **opencode:** agrégalo en `~/.config/opencode/opencode.json` (o `.jsonc`) y autoriza con `opencode mcp auth granola`:
+**Claude Code:**
 
-  ```json
-  {
-    "mcp": {
-      "granola": { "type": "remote", "url": "https://mcp.granola.ai/mcp" }
-    }
+```bash
+claude mcp add --scope user --transport http granola https://mcp.granola.ai/mcp
+claude mcp login granola
+claude mcp list
+```
+
+`--scope user` lo deja disponible en todos tus proyectos; sin él solo queda en el proyecto actual. `claude mcp login` abre el navegador para autorizar con tu cuenta de Granola, y `claude mcp list` debe mostrar `granola` conectado.
+
+**opencode:**
+
+```bash
+opencode mcp add granola --url https://mcp.granola.ai/mcp
+opencode mcp auth granola
+opencode mcp list
+```
+
+`opencode mcp auth` abre el navegador para autorizar con tu cuenta de Granola, y `opencode mcp list` debe mostrar `granola` conectado. Si prefieres editar el archivo a mano, agrega esto en `~/.config/opencode/opencode.json` (o `.jsonc`) y luego ejecuta `opencode mcp auth granola`:
+
+```json
+{
+  "mcp": {
+    "granola": { "type": "remote", "url": "https://mcp.granola.ai/mcp" }
   }
-  ```
+}
+```
+
+Si `granola` ya existe en tu configuración, `add` avisa o lo repite; revisa con `list` antes de agregarlo. Para quitarlo: `claude mcp remove granola` o `opencode mcp logout granola` (borra la autorización).
 
 **Verifica la instalación** abriendo una sesión nueva:
 
