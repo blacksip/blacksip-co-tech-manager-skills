@@ -4,13 +4,48 @@ Marketplace de plugins de Claude Code para los Tech Managers de Blacksip.
 
 ## Antes de instalar (una sola vez)
 
-El marketplace es privado y se clona por SSH, así que `gh` (GitHub CLI) debe estar instalado y con sesión **antes** de `/plugin marketplace add`. En una terminal (macOS), copia y pega:
+El marketplace es privado y se clona por SSH, así que `gh` (GitHub CLI) debe estar instalado y con sesión **antes** de `/plugin marketplace add`. En `gh auth login` elige siempre **GitHub.com → SSH**. Además necesitas el `client_secret.json` compartido del equipo: descárgalo de 1Password, bóveda `Technology - TechManagers`, ítem `gws – client_secret.json (Blacksip)` (no está en este repo a propósito).
+
+### macOS
+
+Si no tienes Homebrew, instálalo primero desde https://brew.sh. Luego, en una terminal, copia y pega:
 
 ```bash
 brew install gh && { gh api user >/dev/null 2>&1 || gh auth login; } && bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/setup.sh -H "Accept: application/vnd.github.raw")
 ```
 
-Si no tienes Homebrew, instálalo primero desde https://brew.sh. En `gh auth login` elige **GitHub.com → SSH**. El script `scripts/setup.sh` te guía para dejar listos `gh`, Node.js, Python 3 y `gws` (con tu sesión de Google y el `client_secret.json` compartido del equipo, que no está en este repo: descárgalo de 1Password, bóveda `Technology - TechManagers`, ítem `gws – client_secret.json (Blacksip)`) y verifica el acceso al repo y a la plantilla de acta; puedes volver a ejecutarlo cuando quieras (no repite lo ya instalado).
+El script `scripts/setup.sh` te guía para dejar listos `gh`, Node.js, Python 3 y `gws` (con tu sesión de Google y el `client_secret.json`), y verifica el acceso al repo y a la plantilla de acta. Puedes volver a ejecutarlo cuando quieras: no repite lo ya instalado.
+
+### Windows
+
+Los scripts de este repo son de bash y solo están probados en macOS. En Windows usa **WSL2 (Ubuntu)**, que es la ruta recomendada:
+
+1. En PowerShell como administrador: `wsl --install -d Ubuntu`, reinicia y crea tu usuario de Ubuntu.
+2. Abre **Ubuntu** (no PowerShell) y ejecuta todo lo que sigue allí. Instala las herramientas base:
+
+   ```bash
+   sudo apt update && sudo apt install -y git python3 curl
+   ```
+
+3. Instala **Node.js 20 o superior** (https://github.com/nvm-sh/nvm) y **GitHub CLI** (https://github.com/cli/cli/blob/trunk/docs/install_linux.md).
+4. Instala `gws` e inicia sesión en GitHub:
+
+   ```bash
+   npm install -g @googleworkspace/cli
+   gh auth login        # GitHub.com → SSH
+   ```
+
+5. Descarga el `client_secret.json` de 1Password (en Windows, p. ej. a `Descargas`) y cópialo desde Ubuntu:
+
+   ```bash
+   mkdir -p ~/.config/gws && cp "/mnt/c/Users/<tu-usuario>/Downloads/client_secret.json" ~/.config/gws/ && chmod 600 ~/.config/gws/client_secret.json
+   gws auth login -s drive,docs
+   ```
+
+   Si el navegador no se abre solo, copia la URL que imprime `gws` y ábrela en Windows.
+6. Sigue con "Instalar" (Claude Code dentro de WSL) o con "Instalar en opencode". Los comandos son los mismos que en macOS.
+
+Alternativa sin WSL (PowerShell nativo): `winget install GitHub.cli Python.Python.3.12 OpenJS.NodeJS`, luego `npm install -g @googleworkspace/cli` y `gh auth login`. **No está verificada:** `md_to_gdoc.py` invoca `python3` y `gws`, que en Windows nativo pueden no resolverse igual. Si la usas, repórtalo para ajustar los scripts.
 
 ## Instalar
 
@@ -27,9 +62,9 @@ Si no tienes Homebrew, instálalo primero desde https://brew.sh. En `gh auth log
 
 ## Instalar en opencode (sin Claude Code)
 
-Para quien usa opencode en lugar de Claude Code (o además de él). Solo macOS/Linux.
+Para quien usa opencode en lugar de Claude Code (o además de él). Solo macOS/Linux (en Windows, dentro de WSL2).
 
-**1. Requisitos previos (una sola vez).** `gh` con sesión y SSH, igual que en "Antes de instalar" (si ya ejecutaste ese comando, salta al paso 2). Necesitas además opencode instalado: `curl -fsSL https://opencode.ai/install | bash`.
+**1. Requisitos previos (una sola vez).** `gh` con sesión y SSH, según tu sistema en "Antes de instalar" (si ya lo hiciste, salta al paso 2). Necesitas además opencode instalado: `curl -fsSL https://opencode.ai/install | bash`.
 
 **2. Instalar.** En una terminal:
 
@@ -46,7 +81,7 @@ Clona este repo en `~/.local/share/blacksip-co-tech-manager-skills`, copia las s
 | `/tm-actas:crear-acta-md <notas o enlace>` | Crea el acta en Markdown (`actas/YYYYMMDD-acta-<tema>.md`) |
 | `/tm-actas:acta-md-to-google-docs <acta.md>` | Pasa el acta a Google Docs con la plantilla de BlackSip |
 
-**4. Requisitos de las skills (una sola vez).** Ejecuta `bash ~/.local/share/blacksip-co-tech-manager-skills/scripts/setup.sh` para dejar listos `gws`, la sesión de Google y el `client_secret.json` (1Password, bóveda `Technology - TechManagers`).
+**4. Requisitos de las skills (una sola vez).** En macOS ejecuta `bash ~/.local/share/blacksip-co-tech-manager-skills/scripts/setup.sh` para dejar listos `gws`, la sesión de Google y el `client_secret.json`. En Windows/WSL ya lo hiciste en "Antes de instalar".
 
 **5. MCP de Granola** (para leer notas de reunión). Agrégalo en `~/.config/opencode/opencode.json` (o `.jsonc`) y autoriza con `opencode mcp auth granola`:
 
@@ -62,7 +97,7 @@ Si no lo configuras, `crear-acta-md` funciona pegándole el texto de las notas.
 
 **Actualizar:** vuelve a ejecutar el comando del paso 2 y reinicia opencode. **Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
 
-Los dos puntos de `tm-actas:` no son válidos en nombres de archivo de Windows, por eso el script es solo para macOS/Linux.
+Los dos puntos de `tm-actas:` no son válidos en nombres de archivo de Windows nativo, por eso el script es para macOS/Linux (WSL incluido).
 
 ## Plugins
 

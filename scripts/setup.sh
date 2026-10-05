@@ -12,7 +12,7 @@ step() { printf '\n\033[1m%s\033[0m\n' "$*"; }
 ask()  { read -r -p "  $1 [s/N] " a; [[ "$a" =~ ^[sSyY]$ ]]; }
 die()  { printf '  \033[31m✘\033[0m %s\n' "$*"; exit 1; }
 
-[[ "$(uname)" == "Darwin" ]] || die "Este script solo cubre macOS. En Linux/Windows instala gh, Node.js, Python 3 y 'npm i -g @googleworkspace/cli' a mano y ejecuta 'gh auth login' y 'gws auth login'."
+[[ "$(uname)" == "Darwin" ]] || die "Este script solo cubre macOS. Para Linux/Windows (WSL) sigue la sección "Windows" del README.."
 
 step "1/6 Homebrew"
 if command -v brew >/dev/null; then ok "brew instalado"
