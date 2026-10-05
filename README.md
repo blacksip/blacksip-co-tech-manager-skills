@@ -181,7 +181,17 @@ opencode mcp list
 
 `opencode mcp auth` abre el navegador para autorizar con tu cuenta de Granola, y `opencode mcp list` debe mostrar `granola` conectado.
 
-Para quitarlo: `claude mcp remove granola` o `opencode mcp logout granola` (borra la autorización).
+**Cerrar sesión** (borra la autorización de Granola, pero deja el servidor configurado):
+
+```bash
+claude mcp logout granola
+opencode mcp logout granola
+```
+
+**Quitar el servidor:**
+
+- **Claude Code:** `claude mcp remove granola`
+- **opencode:** no tiene un comando para quitarlo; elimina la entrada `granola` de la sección `mcp` en tu `opencode.json` (o `.jsonc`) en `~/.config/opencode/`.
 
 **Verifica la instalación** abriendo una sesión nueva:
 
