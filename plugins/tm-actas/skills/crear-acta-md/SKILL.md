@@ -12,8 +12,8 @@ Convierte notas de reunión en un acta `.md` con el formato fijo de BlackSip. El
 Según lo que dé el usuario:
 - **Texto pegado**: úsalo tal cual.
 - **Granola**: busca la reunión con las herramientas del MCP de Granola (`list_meetings` / `get_meetings` y, si hace falta, `get_meeting_transcript`; en Claude Code llevan el prefijo `mcp__granola__` y se cargan con ToolSearch).
-- **Google (Gemini/Docs)**: usa la skill `gws-docs` o `gws-drive` con el enlace o nombre del documento.
-  Un Google Doc puede tener varias pestañas (`?tab=t.xxxx`), una por reunión. `read_file_content` y `download_file_content` del conector de Drive devuelven **sólo la primera pestaña**, que puede ser otra reunión: comprueba que el título y los asistentes correspondan. Para leer una pestaña concreta usa `gws docs documents get --params '{"documentId":"<id>","includeTabsContent":true}'` y filtra por el `tabId` del enlace. Si `gws` da error de autenticación, pide al usuario que ejecute `gws auth login`.
+- **Google (Gemini/Docs)**: lee el documento con el CLI `gws` (no hace falta ninguna skill adicional). Si el usuario da un enlace, el id del documento está en la URL; si da un nombre, búscalo con `gws drive files list --params '{"q":"name contains '<texto>'"}'`.
+  Un Google Doc puede tener varias pestañas (`?tab=t.xxxx`), una por reunión, y los conectores de Drive devuelven **sólo la primera pestaña**, que puede ser otra reunión. Para leer una pestaña concreta usa `gws docs documents get --params '{"documentId":"<id>","includeTabsContent":true}'` y filtra por el `tabId` del enlace; comprueba que el título y los asistentes correspondan. Si `gws` da error de autenticación, pide al usuario que ejecute `gws auth login`.
 - Granola entrega nombres incompletos o apodos (`Roidor`, `Ingenieroti`, "Mauro" por Raúl Mauricio Oidor) y emails genéricos. Completa los nombres con lo que digan las notas y el resto de actas de `actas/`; si dudas, pregunta.
 - Si hay varias fuentes (p. ej. Gemini + Granola), consolídalas y anótalo en Observaciones.
 
