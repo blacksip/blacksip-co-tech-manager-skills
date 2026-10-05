@@ -10,8 +10,10 @@ Copia la plantilla de Drive y escribe en ella el contenido del acta `.md`, conse
 ## Uso
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/acta-md-to-google-docs/scripts/md_to_gdoc.py" actas/YYYYMMDD-acta-<tema>.md
+python3 <directorio-de-esta-skill>/scripts/md_to_gdoc.py actas/YYYYMMDD-acta-<tema>.md
 ```
+
+`<directorio-de-esta-skill>` es la carpeta donde está este `SKILL.md` (el "directorio base" que informa el cliente al cargar la skill); el script vive en su subcarpeta `scripts/`. Funciona igual en Claude Code (plugin) y en opencode.
 
 Opciones: `--folder <id>` (por defecto la copia queda en la carpeta de la plantilla), `--name "<título>"` (por defecto `YYYY-MM-DD - Acta <Número de acta> - <Asunto antes de ":">` (el número se copia tal cual del campo "Número de acta", sea `20261002-01` o un consecutivo como `12`; si el campo está vacío se omite). Empezar por la fecha hace que el orden alfabético sea también cronológico), `--template <id>` (por defecto la plantilla de BlackSip).
 
@@ -19,7 +21,7 @@ El script imprime la URL del documento. Entrégasela al usuario.
 
 ## Antes de ejecutar
 
-1. Confirma que existe el `.md` y que sigue la estructura de `crear-acta-md` (secciones `## INFORMACIÓN GENERAL…`, `## ASISTENTES`, `## DESARROLLO…`, `## CONCLUSIONES`, `## COMPROMISOS`, `## FIRMA DEL ACTA`). Nunca elijas el acta por tu cuenta: si el usuario no indicó el archivo, o dio uno ambiguo, pregunta cuál convertir con `AskUserQuestion`, ofreciendo como opciones las 3 actas más recientes de `actas/` (ordena por el prefijo `YYYYMMDD` del nombre, de más nueva a más antigua) y la opción de indicar otra. Espera su respuesta antes de ejecutar el script.
+1. Confirma que existe el `.md` y que sigue la estructura de `crear-acta-md` (secciones `## INFORMACIÓN GENERAL…`, `## ASISTENTES`, `## DESARROLLO…`, `## CONCLUSIONES`, `## COMPROMISOS`, `## FIRMA DEL ACTA`). Nunca elijas el acta por tu cuenta: si el usuario no indicó el archivo, o dio uno ambiguo, pregunta cuál convertir preguntándoselo al usuario (herramienta de preguntas del cliente), ofreciendo como opciones las 3 actas más recientes de `actas/` (ordena por el prefijo `YYYYMMDD` del nombre, de más nueva a más antigua) y la opción de indicar otra. Espera su respuesta antes de ejecutar el script.
 2. Cada ejecución crea un documento **nuevo** en Drive; no hay forma de actualizar uno ya creado. Si el usuario quiere cambios, edita el `.md` y vuelve a generar, y avísale de que el anterior queda en Drive para borrarlo.
 3. Si `gws` falla con `invalid_grant` / `invalid_rapt`, el token de Google venció: pide al usuario ejecutar `gws auth login` (no puedes hacerlo tú, es interactivo) y reintenta.
 

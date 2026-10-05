@@ -64,6 +64,7 @@ then ok "acceso a la plantilla de acta en Drive"
 else warn "No se pudo leer la plantilla de acta en Drive: pide acceso a la carpeta 'Template' o reintenta 'gws auth login'."; fi
 
 step "Listo"
-echo "  Instala el plugin dentro de Claude Code:"
+echo "  Claude Code: instala el plugin dentro de Claude Code:"
 echo "    /plugin marketplace add blacksip/blacksip-co-tech-manager-skills"
 echo "    /plugin install tm-actas@blacksip-co-tech-manager-skills"
+echo "  opencode (sin Claude Code): bash scripts/install-opencode.sh"
