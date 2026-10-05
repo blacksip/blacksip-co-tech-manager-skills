@@ -63,8 +63,8 @@ if gws drive files get --params "{\"fileId\":\"$TEMPLATE_ID\",\"supportsAllDrive
 then ok "acceso a la plantilla de acta en Drive"
 else warn "No se pudo leer la plantilla de acta en Drive: pide acceso a la carpeta 'Template' o reintenta 'gws auth login'."; fi
 
-step "Listo"
-echo "  Claude Code: instala el plugin dentro de Claude Code:"
-echo "    /plugin marketplace add blacksip/blacksip-co-tech-manager-skills"
-echo "    /plugin install tm-actas@blacksip-co-tech-manager-skills"
-echo "  opencode (sin Claude Code): bash scripts/install-opencode.sh"
+step "Requisitos listos"
+echo "  Siguiente paso: instalar las skills (paso 2 del README):"
+echo "    Claude Code: abre Claude Code y ejecuta /plugin marketplace add blacksip/blacksip-co-tech-manager-skills"
+echo "                 y luego /plugin install tm-actas@blacksip-co-tech-manager-skills"
+echo "    opencode:    bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/install-opencode.sh -H \"Accept: application/vnd.github.raw\")"

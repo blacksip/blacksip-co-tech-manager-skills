@@ -93,7 +93,7 @@ Alternativa sin WSL (PowerShell nativo): `winget install GitHub.cli Python.Pytho
 
 ## Paso 2A. Instalar en Claude Code
 
-En macOS, en una terminal normal. En Windows, dentro de Ubuntu (WSL), donde debes tener Claude Code instalado según su documentación oficial. Abre Claude Code y ejecuta:
+Abre Claude Code y ejecuta:
 
 ```
 /plugin marketplace add blacksip/blacksip-co-tech-manager-skills
