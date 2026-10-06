@@ -1,11 +1,18 @@
 {
   "name": "blacksip-co-tech-manager-skills",
-  "owner": { "name": "Blacksip Tech Managers" },
+  "owner": {
+    "name": "Blacksip Tech Managers"
+  },
   "plugins": [
     {
       "name": "tm-actas",
       "source": "./plugins/tm-actas",
       "description": "Actas de reunión BlackSip: crear el acta en Markdown y pasarla a Google Docs"
+    },
+    {
+      "name": "tm-scrum-of-scrum",
+      "source": "./plugins/tm-scrum-of-scrum",
+      "description": "Scrum of Scrum BlackSip: leer el seguimiento del Hub y actualizar proyectos y evoluciones en alerta"
     }
   ]
 }

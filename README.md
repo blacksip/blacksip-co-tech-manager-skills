@@ -6,6 +6,7 @@ Skills compartidas de los Tech Managers de Blacksip. Funcionan en **Claude Code*
 | :-- | :-- | :-- |
 | `tm-actas` | `crear-acta-md`: crea el acta de una reunión en Markdown desde notas de Granola, Gemini o texto pegado | `/tm-actas:crear-acta-md` |
 | | `acta-md-to-google-docs`: pasa un acta `.md` a Google Docs con la plantilla de BlackSip | `/tm-actas:acta-md-to-google-docs` |
+| `tm-scrum-of-scrum` | `seguimiento-hub-scrum`: lee el seguimiento del Hub, actualiza proyectos y evoluciones en alerta de la agenda y cruza con la asignación de TM | `/tm-scrum-of-scrum:seguimiento-hub-scrum` |
 
 ## Elige tu camino
 
