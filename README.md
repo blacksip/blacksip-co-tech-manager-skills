@@ -6,7 +6,7 @@ Skills compartidas de los Tech Managers de Blacksip. Funcionan en **Claude Code*
 | :-- | :-- | :-- |
 | `tm-actas` | `crear-acta-md`: crea el acta de una reunión en Markdown desde notas de Granola, Gemini o texto pegado | `/tm-actas:crear-acta-md` |
 | | `acta-md-to-google-docs`: pasa un acta `.md` a Google Docs con la plantilla de BlackSip | `/tm-actas:acta-md-to-google-docs` |
-| `tm-scrum-of-scrum` | `seguimiento-hub-scrum`: lee el seguimiento del Hub, actualiza proyectos y evoluciones en alerta de la agenda y cruza con la asignación de TM | `/tm-scrum-of-scrum:seguimiento-hub-scrum` |
+| | `seguimiento-hub-scrum`: lee el seguimiento del Hub, actualiza proyectos y evoluciones en alerta de la agenda y cruza con la asignación de TM | `/tm-actas:seguimiento-hub-scrum` |
 
 ## Elige tu camino
 
@@ -130,7 +130,7 @@ bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/in
 El script clona este repo en `~/.local/share/blacksip-co-tech-manager-skills`, copia las skills a `~/.config/opencode/skills/` y crea un comando por skill en `~/.config/opencode/commands/` con el prefijo `tm-actas:`. Reinicia opencode.
 
 - **Actualizar:** vuelve a ejecutar el mismo comando y reinicia opencode.
-- **Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
+- **Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs,seguimiento-hub-scrum}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
 
 ### Windows (WSL2)
 
@@ -168,7 +168,7 @@ bash <(gh api repos/blacksip/blacksip-co-tech-manager-skills/contents/scripts/in
 El script clona este repo en `~/.local/share/blacksip-co-tech-manager-skills`, copia las skills a `~/.config/opencode/skills/` y crea un comando por skill en `~/.config/opencode/commands/` con el prefijo `tm-actas:`. Reinicia opencode.
 
 - **Actualizar:** vuelve a ejecutar el mismo comando y reinicia opencode.
-- **Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
+- **Desinstalar:** borra `~/.config/opencode/skills/{crear-acta-md,acta-md-to-google-docs,seguimiento-hub-scrum}`, `~/.config/opencode/commands/tm-actas:*.md` y `~/.local/share/blacksip-co-tech-manager-skills`.
 
 ---
 
