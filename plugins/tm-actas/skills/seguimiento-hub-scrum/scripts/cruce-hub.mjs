@@ -2,7 +2,7 @@
 // Uso:  node scripts/cruce-hub.mjs --info              (semana actual y anterior)
 //       node scripts/cruce-hub.mjs [--week=YYYY-MM-DD]  (por defecto, la semana anterior)
 // Salida: scripts/out/cruce-<lunes>.{md,json}
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 
 const arg = (k) => process.argv.find((a) => a.startsWith(`--${k}=`))?.slice(k.length + 3);
 const monday = (d) => { d = new Date(d); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d; };
@@ -28,7 +28,9 @@ const hub = JSON.parse(readFileSync(`scripts/out/hub-${wk}.json`, 'utf8'));
 const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
 // --- parseo de asignacion-proyectos-tm.md ---
-const md = readFileSync('asignacion-proyectos-tm.md', 'utf8');
+const ASIG = ['agendas/asignacion-proyectos-tm.md', 'asignacion-proyectos-tm.md'].find((f) => existsSync(f)); // agendas/ (repo reorganizado) o la raíz (estructura anterior)
+if (!ASIG) { console.error('No encuentro asignacion-proyectos-tm.md (ni en agendas/ ni en la raíz). Ejecuta desde la carpeta de trabajo del Scrum of Scrum.'); process.exit(1); }
+const md = readFileSync(ASIG, 'utf8');
 const sec = (t) => md.split('\n## ').find((s) => s.startsWith(t)) ?? '';
 const asignados = [];
 for (const l of sec('Tech Managers').split('\n').filter((l) => l.startsWith('| **'))) {

@@ -5,7 +5,7 @@ description: Lee el seguimiento semanal de proyectos y evoluciones del Hub de Bl
 
 # Seguimiento Hub → agenda del Scrum of Scrum
 
-**Requisitos.** Ejecuta todo desde la carpeta de trabajo del Scrum of Scrum (donde viven `asignacion-proyectos-tm.md` y las agendas `YYYY-MM-DD-scrum-of-scrum.md`). Los scripts del skill leen y escriben ahí: `.hub-profile/` (sesión del Hub) y `scripts/out/` (resultados). Necesitas Node 20+ y `playwright` instalado en esa carpeta (`npm i playwright`). Si falta `asignacion-proyectos-tm.md`, avisa y no sigas.
+**Requisitos.** Ejecuta todo desde la carpeta de trabajo del Scrum of Scrum (donde viven, en `agendas/`, `asignacion-proyectos-tm.md`, `plantilla-tarea-semanal.md` y las agendas `YYYY-MM-DD-scrum-of-scrum.md`; en repos con la estructura anterior estaban en la raíz). Los scripts del skill leen y escriben ahí: `.hub-profile/` (sesión del Hub) y `scripts/out/` (resultados). Necesitas Node 20+ y `playwright` instalado en esa carpeta (`npm i playwright`). Si falta `asignacion-proyectos-tm.md`, avisa y no sigas.
 
 Convierte los reportes del Hub en los bloques 3 y 4 de la agenda y avisa si `asignacion-proyectos-tm.md` quedó desactualizado. Los TM reportan jueves/viernes, por eso la semana que normalmente se revisa es la anterior.
 
@@ -37,9 +37,9 @@ Escribe `scripts/out/cruce-<lunes>.md` (resumen legible) y `.json` (alertas con 
 
 ## 4. Actualizar el documento de la agenda
 
-**Qué archivo actualizar.** La reunión es el lunes siguiente a la semana leída: `<lunes> + 7 días`. Con la semana 40 (lunes 2026-09-28), la reunión es el 2026-10-05 y el archivo es `2026-10-05-scrum-of-scrum.md`, en la raíz del repo.
+**Qué archivo actualizar.** La reunión es el lunes siguiente a la semana leída: `<lunes> + 7 días`. Con la semana 40 (lunes 2026-09-28), la reunión es el 2026-10-05 y el archivo es `agendas/2026-10-05-scrum-of-scrum.md`.
 1. Si ese archivo existe, actualiza sus bloques 3 y 4.
-2. Si no existe, créalo desde `plantilla-tarea-semanal.md` con esa fecha.
+2. Si no existe, créalo desde `agendas/plantilla-tarea-semanal.md` con esa fecha.
 3. Di en la respuesta qué archivo vas a tocar y si es uno existente o nuevo. Si hay más de un candidato o la fecha no cuadra, pregunta con AskUserQuestion antes de escribir.
 
 Respeta el formato existente: cada bloque es un título `##`; dentro, cada TM va como título `### Nombre Tech Manager` (no en negrita), con su tabla de excepciones debajo.
