@@ -44,6 +44,8 @@ Escribe `scripts/out/cruce-<lunes>.md` (resumen legible) y `.json` (alertas con 
 
 Respeta el formato existente: cada bloque es un título `##`; dentro, cada TM va como título `### Nombre Tech Manager` (no en negrita), con su tabla de excepciones debajo.
 
+**Orden de los TM (bloques 3 y 4, siempre igual):** alfabético por nombre completo, sin tildes (Cristian Calderón, Heidy Romero, Jorge De la Cruz, Juan Manuel Viveros, Leonardo Villamil, Lucia Díaz, Miguel Castellanos, Raul Oidor, Victor Guevara) y «Sin TM definido» al final. Es el orden de `resumen-bloque4`; no uses el orden de `asignacion-proyectos-tm.md` ni una lista escrita a mano. Un TM sin filas ni «Sin reporte» no lleva sección. Los textos que cierran el bloque 4 (p. ej. «Diferencias con la asignación de TM») van después de la última sección de TM, no dentro de ella.
+
 **Bloque 2 · Acuerdos abiertos** (desde ClickUp, no del Hub)
 - Corre `npm run resumen-acuerdos -- --semana=<lunes>` (lee la lista Scrum of Scrum por API; necesita `CLICKUP_API_TOKEN` en el entorno o en `~/.config/blacksip/.env`) y toma `reportes/resumen-acuerdos-<lunes>.md`.
 - Reemplaza la tabla vacía de la sección 2 por la del archivo, sin reescribirla ni cambiar columnas; copia la leyenda de estados y la línea de fuente, y deja "Observaciones" y "Resultado" en blanco (se llenan en sala). El archivo ya trae Responsable primero (una vez por persona), el emoji de estado en cada acuerdo y `S.<semana> · fecha · retraso` en Fecha original. Si no hay acuerdos abiertos, deja el texto que trae el archivo.
