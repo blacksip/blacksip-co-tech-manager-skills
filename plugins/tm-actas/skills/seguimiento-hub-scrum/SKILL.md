@@ -38,11 +38,16 @@ Escribe `scripts/out/cruce-<lunes>.md` (resumen legible) y `.json` (alertas con 
 ## 4. Actualizar el documento de la agenda
 
 **Qué archivo actualizar.** La reunión es el lunes siguiente a la semana leída: `<lunes> + 7 días`. Con la semana 40 (lunes 2026-09-28), la reunión es el 2026-10-05 y el archivo es `agendas/2026-10-05-scrum-of-scrum.md`.
-1. Si ese archivo existe, actualiza sus bloques 3 y 4.
+1. Si ese archivo existe, actualiza sus bloques 2, 3 y 4.
 2. Si no existe, créalo desde `agendas/plantilla-tarea-semanal.md` con esa fecha.
 3. Di en la respuesta qué archivo vas a tocar y si es uno existente o nuevo. Si hay más de un candidato o la fecha no cuadra, pregunta con AskUserQuestion antes de escribir.
 
 Respeta el formato existente: cada bloque es un título `##`; dentro, cada TM va como título `### Nombre Tech Manager` (no en negrita), con su tabla de excepciones debajo.
+
+**Bloque 2 · Acuerdos abiertos** (desde ClickUp, no del Hub)
+- Corre `npm run resumen-acuerdos -- --semana=<lunes>` (lee la lista Scrum of Scrum por API; necesita `CLICKUP_API_TOKEN` en el entorno o en `~/.config/blacksip/.env`) y toma `reportes/resumen-acuerdos-<lunes>.md`.
+- Reemplaza la tabla vacía de la sección 2 por la del archivo, sin reescribirla ni cambiar columnas; copia la leyenda de estados y la línea de fuente, y deja "Observaciones" y "Resultado" en blanco (se llenan en sala). El archivo ya trae Responsable primero (una vez por persona), el emoji de estado en cada acuerdo y `S.<semana> · fecha · retraso` en Fecha original. Si no hay acuerdos abiertos, deja el texto que trae el archivo.
+- Abierto = subtarea de una reunión anterior que no está en `done` ni `Closed`, haya vencido o no. Si el script falla (sin token o sin ClickUp), no inventes la tabla: dilo y deja la sección 2 como estaba.
 
 **Bloque 3 · Proyectos en alerta** (tipo Proyecto)
 - Por TM, tabla con los proyectos en 🔴 desviación, 🟡 riesgo o 🟣 suspendido: `Proyecto | 🚦 | Avance · Go live | Riesgo → qué se pide | Dueño · fecha`. El riesgo y la petición salen del texto y los próximos pasos del reporte, resumidos en una frase; no copies el reporte.
