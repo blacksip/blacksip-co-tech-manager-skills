@@ -78,6 +78,18 @@ Al final de la respuesta, tras mostrar el resultado, incluye estas dos secciones
 
 Si el usuario aprueba cambios, edita las tablas de `asignacion-proyectos-tm.md` (y su sección de reasignaciones si el PM del Hub difiere) y actualiza los conteos del encabezado.
 
+## 6. Subir la agenda a ClickUp (último paso, con confirmación)
+
+Deja en ClickUp la tarea de la sesión (`[Scrum of Scrum] - S.<semana ISO> <Mes> <día>`, con la agenda como descripción) y la subtarea `S.<semana ISO> Informe de capacidad (criterio rol)`. Necesita `CLICKUP_API_TOKEN`; si falta o ClickUp no responde, dilo y termina sin escribir.
+
+1. Corre el plan, que **no escribe**: `npm run subir-agenda -- --semana=<lunes>` (el mismo `<lunes>` confirmado en el paso 1).
+2. Muestra el plan tal cual: qué tarea y subtarea crea o actualiza, si guarda copia de la descripción anterior en comentarios y por qué (plantilla del equipo, texto de una persona o **editada a mano**).
+3. Pregunta con AskUserQuestion, citando la reunión y la semana del plan: «¿Subo la agenda y el informe de capacidad a ClickUp (reunión <fecha>, semana <N>)?» con opciones Sí, súbelos / No, déjalo en el plan.
+4. Solo con un sí corre el mismo comando con `--aplicar` y resume lo hecho (enlaces de la tarea y la subtarea). Con un no o sin respuesta no escribas nada. Nunca pases `--aplicar` sin esa confirmación en esta corrida.
+5. Si el plan dice «sin cambios», no preguntes: dilo y sigue.
+
+Una corrida automatizada (sin usuario) debe pasar `--semana` y `--aplicar` de forma explícita; sin ellos no escribe.
+
 ## Cierre
 
 Resume en pocas líneas: semana leída, conteos, cuántos TM tienen alertas, y cuántas diferencias de asignación quedan por decidir. Recuerda que `scripts/out/` no se versiona.

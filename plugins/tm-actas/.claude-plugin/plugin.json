@@ -1,5 +1,5 @@
 {
   "name": "tm-actas",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Skills para actas y Scrum of Scrum de BlackSip (crear-acta-md, acta-md-to-google-docs, seguimiento-hub-scrum)"
 }
