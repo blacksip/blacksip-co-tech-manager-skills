@@ -39,7 +39,7 @@ Escribe `scripts/out/cruce-<lunes>.md` (resumen legible) y `.json` (alertas con 
 
 **Qué archivo actualizar.** La reunión es el lunes siguiente a la semana leída: `<lunes> + 7 días`. Con la semana 40 (lunes 2026-09-28), la reunión es el 2026-10-05 y el archivo es `agendas/2026-10-05-scrum-of-scrum.md`.
 1. Si ese archivo existe, actualiza sus bloques 2, 3, 4 y 5.
-2. Si no existe, créalo desde `agendas/plantilla-tarea-semanal.md` con esa fecha.
+2. Si no existe, créalo desde `agendas/plantilla-tarea-semanal.md` con esa fecha y rellena TODOS los bloques con las fuentes de esta corrida. Aunque aparezca borrado en git, no lo restaures ni lo tomes de `git show`, de borradores o de archivos viejos en `scripts/out/` (p. ej. `old-agenda.md`) ni reutilices su texto: «Riesgo → qué se pide» y las demás celdas se redactan de nuevo desde `hub-<lunes>.json` y `cruce-<lunes>.json`. Solo un archivo que existe en `agendas/` en este momento cuenta como «existente».
 3. Di en la respuesta qué archivo vas a tocar y si es uno existente o nuevo. Si hay más de un candidato o la fecha no cuadra, pregunta con AskUserQuestion antes de escribir.
 
 Respeta el formato existente: cada bloque es un título `##`; dentro, cada TM va como título `### Nombre Tech Manager` (no en negrita), con su tabla de excepciones debajo.
