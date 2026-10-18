@@ -9,6 +9,16 @@ description: Lee el seguimiento semanal de proyectos y evoluciones del Hub de Bl
 
 Convierte los reportes del Hub en los bloques 3 y 4 de la agenda y avisa si `asignacion-proyectos-tm.md` quedó desactualizado. Los TM reportan jueves/viernes, por eso la semana que normalmente se revisa es la anterior.
 
+## 0. Comprobar el entorno (antes de todo)
+
+Desde la carpeta de trabajo, corre:
+
+```bash
+for f in package.json agendas/asignacion-proyectos-tm.md agendas/plantilla-tarea-semanal.md scripts/reportes-evolucion/armar-agenda.mjs scripts/reportes-evolucion/subir-agenda.mjs; do [ -e "$f" ] || echo "FALTA $f"; done
+```
+
+Si imprime algún `FALTA`, **detente**: no estás en el repo del Scrum of Scrum (o es una versión sin esos scripts). Dile al usuario qué falta y que abra la sesión en `blacksip-co-scrum-of-scrum`; no ejecutes los demás pasos ni intentes reemplazar los `npm run`. Esta skill solo tiene los scripts de lectura del Hub y del cruce; el resto vive en ese repo.
+
 ## 1. Confirmar la semana (siempre, antes de ejecutar nada)
 
 Corre `node ${CLAUDE_SKILL_DIR}/scripts/cruce-hub.mjs --info` y pregunta al usuario (AskUserQuestion) con esas fechas reales:
