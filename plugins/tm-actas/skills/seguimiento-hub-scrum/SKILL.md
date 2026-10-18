@@ -48,7 +48,7 @@ Respeta el formato existente: cada bloque es un título `##`; dentro, cada TM va
 
 **Bloque 2 · Acuerdos abiertos** (desde ClickUp, no del Hub)
 - Corre `npm run resumen-acuerdos -- --semana=<lunes>` (lee la lista Scrum of Scrum por API; necesita `CLICKUP_API_TOKEN` en el entorno o en `~/.config/blacksip/.env`) y toma `reportes/resumen-acuerdos-<lunes>.md`.
-- Reemplaza la tabla vacía de la sección 2 por la del archivo, sin reescribirla ni cambiar columnas; copia la leyenda de estados y la línea de fuente, y deja "Observaciones" y "Resultado" en blanco (se llenan en sala). El archivo ya trae Responsable primero (una vez por persona), el emoji de estado en cada acuerdo y `S.<semana> · fecha · retraso` en Fecha original. Si no hay acuerdos abiertos, deja el texto que trae el archivo.
+- Reemplaza todo el contenido de la sección 2 (el párrafo descriptivo y la tabla vacía de la plantilla) por el del archivo, sin reescribirla ni cambiar columnas; copia la leyenda de estados y la línea de fuente, y deja "Observaciones" y "Resultado" en blanco (se llenan en sala). El archivo ya trae Responsable primero (una vez por persona), el emoji de estado en cada acuerdo y `S.<semana> · fecha · retraso` en Fecha original. Si no hay acuerdos abiertos, deja el texto que trae el archivo.
 - Abierto = subtarea de una reunión anterior que no está en `done` ni `Closed`, haya vencido o no. Si el script falla (sin token o sin ClickUp), no inventes la tabla: dilo y deja la sección 2 como estaba.
 
 **Bloques 3 y 4 · Proyectos y evoluciones en alerta** (los arma el script `armar-agenda` del repo desde el cruce; no los escribas a mano)
@@ -59,7 +59,7 @@ Respeta el formato existente: cada bloque es un título `##`; dentro, cada TM va
 - El Hub no distingue proyecto de evolución: la tabla del `.md` decide (los soportes de operación de cuenta cuentan como evolución).
 
 **Bloque 7 · Cierre** (siempre, después de los bloques 3, 4 y 5; el script no lo toca)
-- Escribe un borrador bajo «Para el BlackOps Weekly» con el día real (el martes siguiente a la reunión: `**Para el BlackOps Weekly (martes <día> de <mes>, 11:00 am)** *(borrador a ajustar en sala)*`) y tres puntos numerados, sin inventar cifras:
+- Escribe un borrador bajo «Para el BlackOps Weekly» con el día real: el martes de la semana de la reunión, y si la reunión es martes, ese mismo día (`**Para el BlackOps Weekly (martes <día> de <mes>, 11:00 am)** *(borrador a ajustar en sala)*`) y tres puntos numerados, sin inventar cifras:
   1. **Proyectos:** alertas del bloque 3 por estado (con los nombres de los proyectos) y «sin reporte»; luego las evoluciones en alerta y sin reporte del bloque 4.
   2. **Capacidad:** lo más relevante de la Lectura rápida del bloque 5 (sobrecarga, vacantes sin cubrir, ausencias).
   3. **OKR:** «pendiente de cifras» mientras el bloque 6 esté vacío.
