@@ -1,5 +1,5 @@
 {
   "name": "tm-actas",
-  "version": "1.11.1",
-  "description": "Skills para actas y Scrum of Scrum de BlackSip (crear-acta-md, acta-md-to-google-docs, seguimiento-hub-scrum)"
+  "version": "2.0.0",
+  "description": "Skills para actas de BlackSip (crear-acta-md, acta-md-to-google-docs). seguimiento-hub-scrum pasó a ser una skill local del repo blacksip-co-scrum-of-scrum"
 }
