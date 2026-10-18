@@ -73,10 +73,9 @@ No dejes celdas con datos supuestos: lo que no esté en el reporte se marca **(c
 
 ## 5. Informar diferencias con asignacion-proyectos-tm.md
 
-Al final de la respuesta, tras mostrar el resultado, incluye estas dos secciones aunque estén vacías (di «ninguno»):
+Lo que requiere decisión **ya está en la agenda**: `armar-agenda` escribe al final del bloque 4 la sección «Decisiones de asignación de TM» (evoluciones sin TM con Technology en el SOW, evoluciones sin SOW, tarjetas nuevas del Hub, filas del `.md` sin reporte semanal) y el plan imprime cada caso y lo que no entra (SOW sin Technology, internas, evoluciones de ClickUp). No la clasifiques ni la reescribas a mano: al final de la respuesta resume lo que imprimió el plan (cuántos casos y cuáles). Si el plan avisa que la sección tiene notas de sala en «Decisión», no uses `--forzar` sin preguntar. Si `hub/proyectos-hub.json` falta o es viejo (el plan imprime su fecha), dilo: se refresca con `npm run proyectos-hub` (abre el Hub).
 
-1. **Nuevos en el Hub, no están en el .md.** Lista cada uno con su PM del Hub y si ese PM es uno de los TM considerados (Leonardo Villamil, Lucia Díaz, Victor Guevara, Raul Oidor, Heidy Romero, Jorge De la Cruz, Cristian Calderón, Juan Manuel Viveros, Miguel Castellanos). Los de un TM considerado, o de PM que ya tenga reasignación, se priorizan y se **sugiere agregarlos** indicando TM y tipo (Proyecto/Evolución) propuestos. No edites el `.md` sin que el usuario confirme: la asignación es decisión suya. Antes de listarlo como nuevo, revisa que no sea solo una diferencia de nombre (p. ej. «Agrícola Himalaya · Implementación Portal B2B» vs. «… Portal B2B Agrícola Himalaya»); si lo es, dilo como diferencia de nombre y propón unificarla.
-2. **Están en el .md, no aparecen en el Hub.** Sepáralos en: (a) los marcados *fuera del Hub* (esperados), (b) evoluciones de cuenta que viven en ClickUp y no tienen ficha en el Hub (esperable, pero menciónalo), (c) el resto, que pueden estar finalizados/suspendidos y ocultos por el filtro del Hub, renombrados o mal escritos. Pide revisarlos.
+Aparte, menciona (sin decidir) si el cruce trae nombres casi iguales entre el Hub y el `.md` (p. ej. «Portal B2B Agrícola Himalaya» y «Portal B2B Himalaya»): es diferencia de nombre y se propone unificarla.
 
 Si el usuario aprueba cambios, edita las tablas de `asignacion-proyectos-tm.md` (y su sección de reasignaciones si el PM del Hub difiere) y actualiza los conteos del encabezado.
 
