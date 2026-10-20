@@ -2,9 +2,15 @@
 """Convierte un acta .md de BlackSip en un Google Doc copiando la plantilla.
 
 Uso: md_to_gdoc.py actas/YYYYMMDD-acta-tema.md [--template ID] [--folder ID] [--name TXT]
-Requiere `gws` autenticado (gws auth login). Solo stdlib.
+                   [--imagenes incrustar|enlaces|ninguna]
+Ejecutar desde la raíz del proyecto (`gws --upload` solo acepta archivos dentro del
+directorio actual). Requiere `gws` autenticado (gws auth login). Solo stdlib.
 """
-import argparse, json, re, subprocess, sys
+import argparse, json, os, re, subprocess, sys
+
+TEMP_FOLDER = "adjuntos-actas-temp"
+LINK_RE = re.compile(r"\[([^\]]+)\]\((#[\w-]+)\)")
+IMG_RE = re.compile(r"!\[(.*?)\]\((.*?)\)")
 
 TEMPLATE_ID = "1bZv4FqpYhR4F4p_X2E7ejkG0JiKrlGJwz04rWVHN0-0"
 
@@ -46,15 +52,31 @@ def plain(s):
 
 
 def blocks(lines):
-    """Líneas -> lista de (tipo, texto) con tipo p|ol|ul."""
-    out, para = [], []
+    """Líneas -> lista de (tipo, dato): p|ol|ul (texto), img ((alt, ruta)), tbl (filas)."""
+    out, para, tbl = [], [], []
     def flush():
         if para:
             out.append(("p", " ".join(para))); para.clear()
+        if tbl:
+            out.append(("tbl", table_rows(tbl))); tbl.clear()
     for l in lines:
         s = l.strip()
+        if s.startswith("|"):
+            if para:
+                flush()
+            tbl.append(l); continue
+        if tbl:
+            flush()
         if not s:
             flush()
+        elif IMG_RE.search(s):
+            pos = 0
+            for mo in IMG_RE.finditer(s):
+                if s[pos:mo.start()].strip():
+                    para.append(s[pos:mo.start()].strip())
+                flush(); out.append(("img", (mo.group(1), mo.group(2)))); pos = mo.end()
+            if s[pos:].strip():
+                para.append(s[pos:].strip())
         elif re.match(r"\d+\.\s", s):
             flush(); out.append(("ol", re.sub(r"^\d+\.\s*", "", s)))
         elif s.startswith("- "):
@@ -62,6 +84,36 @@ def blocks(lines):
         else:
             para.append(s)
     flush()
+    return out
+
+
+def parse_annexes(lines):
+    """Sección ANEXOS -> [(letra, título, filas)] con `### Anexo X. Título` + tabla."""
+    out, cur = [], None
+    for l in lines:
+        m = re.match(r"^### Anexo (\w+)\.\s*(.+?)\s*$", l)
+        if m:
+            cur = [m.group(1).upper(), m.group(2), []]; out.append(cur)
+        elif cur and l.strip().startswith("|"):
+            cur[2].append(l)
+    return [(x, t, table_rows(r)) for x, t, r in out]
+
+
+def promote_tables(sections, annexes):
+    """Tablas sueltas del desarrollo -> anexo nuevo + enlace en su lugar (con aviso)."""
+    out = []
+    for title, bl in sections:
+        nb = []
+        for k, d in bl:
+            if k == "tbl" and d:
+                used = {x for x, _, _ in annexes}
+                letter = next(c for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" if c not in used)
+                annexes.append((letter, f"Tabla de {plain(title)}", d))
+                print(f"aviso: tabla suelta en «{plain(title)}» movida al Anexo {letter}", file=sys.stderr)
+                nb.append(("p", f"Ver [Anexo {letter}](#anexo-{letter.lower()})."))
+            elif k != "tbl":
+                nb.append((k, d))
+        out.append((title, nb))
     return out
 
 
@@ -92,13 +144,14 @@ def parse(md):
         elif cur:
             cur[1].append(l)
     firma = tables_in(g("FIRMA"))
+    annexes = parse_annexes(secs.get("ANEXOS", []))
     sign = []
     for c in firma[0][-1]:
         parts = c.split("<br>")
         sign.append((plain(parts[0]), plain(parts[1]) if len(parts) > 1 else ""))
     return dict(
         info=info, att=att, objetivo=objetivo, agenda=agenda,
-        sections=[(t, blocks(b)) for t, b in sections],
+        annexes=annexes, sections=promote_tables([(t, blocks(b)) for t, b in sections], annexes),
         concl=[l.strip()[2:] for l in g("CONCLUSIONES") if l.strip().startswith("- ")],
         comp=table_rows(g("COMPROMISOS"))[1:], sign=sign, autor=firma[1][-1],
     )
@@ -233,9 +286,19 @@ def build(doc_id, a):
     top += [P(x, "ol") for x in a["agenda"]]
     put(1, 2, 0, top)
     dev = []
+    def mark(t):  # [texto](#anexo-x) -> marcador, resuelto en la segunda pasada
+        def r(mo):
+            a["links"].append((mo.group(2).lstrip("#"), mo.group(1)))
+            return f"[[LNK:{len(a['links'])}]]"
+        return LINK_RE.sub(r, t)
+    a["links"], a["imgs"] = [], []
     for title, bl in a["sections"]:
         dev.append(P(title, bold=True))
-        dev += [P(t, k if k != "p" else None) for k, t in bl]
+        for k, t in bl:
+            if k == "img":
+                a["imgs"].append(t); dev.append(P(f"[[IMG:{len(a['imgs'])}]]"))
+            else:
+                dev.append(P(mark(t), k if k != "p" else None))
     put(1, 4, 0, dev)
     put(2, 1, 0, [P(x, "ul") for x in a["concl"]])
     for i, row in enumerate(a["comp"]):
@@ -251,10 +314,154 @@ def build(doc_id, a):
     batch(doc_id, reqs)
 
 
+# ------------------------------------------- segunda pasada: anexos e imágenes
+def body_of(d):
+    return d["tabs"][0]["documentTab"]["body"]["content"]
+
+
+def full_doc(doc_id):
+    return gws("docs", "documents", "get", "--params",
+               json.dumps({"documentId": doc_id, "includeTabsContent": True}))
+
+
+def ptext(p):
+    return "".join(x.get("textRun", {}).get("content", "") for x in p["elements"]).strip()
+
+
+def add_annexes(doc_id, annexes):
+    """Salto de página, «ANEXOS» y por anexo: título (HEADING_2) + tabla real."""
+    batch(doc_id, [{"insertPageBreak": {"endOfSegmentLocation": {}}},
+                   {"insertText": {"endOfSegmentLocation": {}, "text": "ANEXOS\n"}}])
+    titles = [f"Anexo {x}. {t}" for x, t, _ in annexes]
+    for (x, t, rows), title in zip(annexes, titles):
+        cols = max(len(r) for r in rows)
+        batch(doc_id, [{"insertText": {"endOfSegmentLocation": {}, "text": title + "\n"}},
+                       {"insertTable": {"endOfSegmentLocation": {}, "rows": len(rows), "columns": cols}}])
+    rq = []
+    for e in body_of(full_doc(doc_id)):
+        p = e.get("paragraph")
+        if not p:
+            continue
+        t = ptext(p)
+        rng = {"startIndex": e["startIndex"], "endIndex": e["endIndex"] - 1}
+        if t == "ANEXOS":
+            rq.append({"updateTextStyle": {"range": rng, "fields": "bold", "textStyle": {"bold": True}}})
+        elif t in titles:
+            rq.append({"updateParagraphStyle": {"range": {"startIndex": e["startIndex"], "endIndex": e["endIndex"]},
+                                                 "fields": "namedStyleType", "paragraphStyle": {"namedStyleType": "HEADING_2"}}})
+            rq.append({"updateTextStyle": {"range": rng, "fields": "bold,fontSize",
+                                           "textStyle": {"bold": True, "fontSize": {"magnitude": 12, "unit": "PT"}}}})
+    batch(doc_id, rq)
+    tb = tables(body_of(full_doc(doc_id)))[-len(annexes):]
+    fill = []
+    for t, (_, _, rows) in zip(tb, annexes):
+        for ri, row in enumerate(rows):
+            for ci, val in enumerate(row):
+                if clean(plain(val)):
+                    idx = t["table"]["tableRows"][ri]["tableCells"][ci]["content"][0]["startIndex"]
+                    fill.append((idx, plain(val), ri == 0))
+    rq = []
+    for idx, val, hd in sorted(fill, reverse=True):  # de abajo hacia arriba
+        rq.append({"insertText": {"location": {"index": idx}, "text": val}})
+        if hd:
+            rq.append({"updateTextStyle": {"range": {"startIndex": idx, "endIndex": idx + len(val)},
+                                           "fields": "bold", "textStyle": {"bold": True}}})
+    batch(doc_id, rq)
+
+
+def temp_folder():
+    q = f"name='{TEMP_FOLDER}' and mimeType='application/vnd.google-apps.folder' and 'root' in parents and trashed=false"
+    f = gws("drive", "files", "list", "--params", json.dumps({"q": q})).get("files", [])
+    if f:
+        return f[0]["id"]
+    return gws("drive", "files", "create", "--json", json.dumps(
+        {"name": TEMP_FOLDER, "mimeType": "application/vnd.google-apps.folder"}))["id"]
+
+
+def finish(doc_id, a, mode, md_dir, stem):
+    """Anexos al final y, en una segunda pasada de abajo hacia arriba, imágenes y enlaces."""
+    annexes, imgs, links = a["annexes"], a["imgs"], a["links"]
+    if annexes:
+        add_annexes(doc_id, annexes)
+    if not (imgs or links):
+        return
+    uri, files, perms = {}, [], []
+    try:
+        if mode == "incrustar":
+            folder = None
+            for n, (alt, path) in enumerate(imgs, 1):
+                full = os.path.normpath(os.path.join(md_dir, path))
+                rel = os.path.relpath(full)
+                if rel.startswith("..") or not os.path.isfile(full):
+                    print(f"aviso: imagen fuera del directorio actual o inexistente, queda como texto: {path}", file=sys.stderr)
+                    continue
+                try:
+                    folder = folder or temp_folder()
+                    ctype = "image/png" if full.lower().endswith(".png") else "image/jpeg"
+                    f = gws("drive", "files", "create", "--json", json.dumps(
+                        {"name": f"{stem}-{os.path.basename(full)}", "parents": [folder]}),
+                        "--upload", rel, "--upload-content-type", ctype)
+                    files.append(f["id"])
+                    perms.append((f["id"], gws("drive", "permissions", "create", "--params",
+                                              json.dumps({"fileId": f["id"]}), "--json",
+                                              json.dumps({"type": "anyone", "role": "reader"}))["id"]))
+                except SystemExit as e:
+                    print(f"aviso: no se pudo compartir/subir la imagen ({e.code}); el resto queda como texto", file=sys.stderr)
+                    break
+                uri[n] = f"https://drive.google.com/uc?export=download&id={f['id']}"
+        d = full_doc(doc_id)
+        hid = {}
+        for e in body_of(d):
+            p = e.get("paragraph")
+            if p and p["paragraphStyle"].get("headingId"):
+                hid[ptext(p)] = p["paragraphStyle"]["headingId"]
+        hid = {f"anexo-{x.lower()}": hid.get(f"Anexo {x}. {t}") for x, t, _ in annexes}
+        marks = []
+        for e in body_of(d):
+            for r in e.get("table", {}).get("tableRows", []):
+                for c in r["tableCells"]:
+                    for p in c["content"]:
+                        for el in p.get("paragraph", {}).get("elements", []):
+                            t = el.get("textRun", {}).get("content", "")
+                            for mo in re.finditer(r"\[\[(IMG|LNK):(\d+)\]\]", t):
+                                marks.append((el["startIndex"] + mo.start(), mo.group(1), int(mo.group(2)), mo.group(0)))
+        rq = []
+        for pos, kind, n, txt in sorted(marks, reverse=True):
+            rq.append({"deleteContentRange": {"range": {"startIndex": pos, "endIndex": pos + len(txt)}}})
+            if kind == "IMG":
+                if n in uri:
+                    rq.append({"insertInlineImage": {"location": {"index": pos}, "uri": uri[n],
+                                                     "objectSize": {"width": {"magnitude": 440, "unit": "PT"}}}})
+                elif mode != "ninguna":
+                    alt, path = imgs[n - 1]
+                    rq.append({"insertText": {"location": {"index": pos}, "text": f"[Imagen: {alt} ({path})]"}})
+            else:
+                slug, texto = links[n - 1]
+                rq.append({"insertText": {"location": {"index": pos}, "text": texto}})
+                if hid.get(slug):
+                    rq.append({"updateTextStyle": {"range": {"startIndex": pos, "endIndex": pos + len(texto)},
+                                                   "fields": "link", "textStyle": {"link": {"headingId": hid[slug]}}}})
+                else:
+                    print(f"aviso: la referencia «{texto}» (#{slug}) no tiene anexo; queda como texto", file=sys.stderr)
+        batch(doc_id, rq)
+    finally:  # el Doc ya guarda su copia: cerrar permiso y borrar el temporal siempre
+        for fid, pid in perms:
+            try:
+                gws("drive", "permissions", "delete", "--params", json.dumps({"fileId": fid, "permissionId": pid}))
+            except SystemExit:
+                print(f"aviso: no se pudo cerrar el permiso de {fid}; búscalo en {TEMP_FOLDER}", file=sys.stderr)
+        for fid in files:
+            try:
+                gws("drive", "files", "delete", "--params", json.dumps({"fileId": fid}))
+            except SystemExit:
+                print(f"aviso: no se pudo borrar {fid}; búscalo en {TEMP_FOLDER}", file=sys.stderr)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("md"); ap.add_argument("--template", default=TEMPLATE_ID)
     ap.add_argument("--folder"); ap.add_argument("--name")
+    ap.add_argument("--imagenes", choices=["incrustar", "enlaces", "ninguna"], default="incrustar")
     o = ap.parse_args()
     a = parse(open(o.md, encoding="utf-8").read())
     m = re.search(r"(\d{4})(\d{2})(\d{2})", o.md.split("/")[-1])
@@ -265,6 +472,7 @@ def main():
     body = {"name": name, **({"parents": [o.folder]} if o.folder else {})}
     new = gws("drive", "files", "copy", "--params", json.dumps({"fileId": o.template}), "--json", json.dumps(body))
     build(new["id"], a)
+    finish(new["id"], a, o.imagenes, os.path.dirname(o.md), os.path.splitext(os.path.basename(o.md))[0])
     print(f"https://docs.google.com/document/d/{new['id']}/edit")
 
 

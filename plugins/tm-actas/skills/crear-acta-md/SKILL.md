@@ -30,6 +30,16 @@ Las notas automáticas (Gemini, Granola) son un borrador con errores típicos; e
 
 Si falta algo que no se puede inferir de las notas (asistentes con email/empresa, hora de inicio/fin, firmantes), pregúntalo en un solo mensaje; no inventes. Lo que siga sin confirmarse se deja como `_(por confirmar)_`.
 
+### Capturas de pantalla (opcional)
+
+Si la reunión es de Granola y tuvo presentación, ofrece incluir capturas (unas **8** como máximo):
+
+1. Lista los IDs y descripciones con `get_meetings` (cargado con ToolSearch).
+2. **Privacidad:** con las descripciones, descarta las capturas con datos personales (resultados o notas de personas, listas de nombres). No las bajes.
+3. Baja las elegidas con `get_meeting_attachment`, **un ID por llamada** (en lote la respuesta supera el límite y llegan solo descripciones). El cliente guarda la imagen como PNG en disco y la ruta sale en la respuesta de la herramienta: cópiala a `actas/adjuntos/<acta>/NN-nombre.jpg` y comprímela a ~120 KB (p. ej. `sips -s format jpeg -s formatOptions 70 -Z 1600`).
+4. Plan B: si el cliente no entrega el archivo, pide al usuario que baje las capturas y úsalas desde la carpeta que indique.
+5. En el desarrollo, cada imagen va como **párrafo propio** `![descripción](adjuntos/<acta>/NN-nombre.jpg)` (ruta relativa al `.md`), en el punto de la agenda al que corresponde. Sin capturas, no se crea `adjuntos/`.
+
 ### Número de acta
 
 Pregunta siempre (junto con las demás dudas, en el mismo mensaje) si el proyecto lleva **numeración continua** de actas y, de ser así, cuál número corresponde a esta (revisa antes los números de las actas existentes en `actas/` para proponer el siguiente). Si el usuario dice que no hay numeración continua, usa el número automático `YYYYMMDD-NN`: la fecha de la reunión y un consecutivo de dos dígitos de las actas de ese día, empezando en `01`. Calcula `NN` contando los archivos `actas/YYYYMMDD-*` ya existentes de esa fecha más uno (si el acta que vas a crear ya es la única, es `01`). Nunca dejes el campo vacío ni inventes un número sin preguntar.
@@ -49,11 +59,13 @@ Secciones, en este orden y con estos encabezados exactos:
 1. `# ACTA DE SEGUIMIENTO DE PROYECTO — BlackSip`
 2. `## INFORMACIÓN GENERAL DE LA REUNIÓN` — tabla de 5 columnas (`Campo | Detalle | | |`): Número de acta (el definido en "Número de acta" del paso 1), Proyecto, Lugar, Fecha de inicio y de finalización (`**Día** | Octubre 2 de 2026 | **Hora** | 10:00 am`), Asunto.
 3. `## ASISTENTES` — tabla `Nombre | Email | Empresa`; fila `**Invitados que no asistieron**` y luego esos invitados.
-4. `## DESARROLLO DE LA REUNIÓN` → `### Agenda` con `## **Objetivo de la reunión**` (un párrafo) y `## **Agenda**` (lista numerada); luego `### Desarrollo de la Agenda` con un `### **N. Tema**` por punto de la agenda. Narra en tercera persona y en pasado (quién dijo/propuso/acordó qué), con cifras y fechas en **negrita**. Escribe prosa, no transcripción. Acuerdos de flujo paso a paso van como lista numerada. Cierra con `### **N. Cierre**`.
+4. `## DESARROLLO DE LA REUNIÓN` → `### Agenda` con `## **Objetivo de la reunión**` (un párrafo) y `## **Agenda**` (lista numerada); luego `### Desarrollo de la Agenda` con un `### **N. Tema**` por punto de la agenda. Las **tablas no van en el desarrollo**: escribe prosa o listas y, si una tabla aporta, ponla en `## ANEXOS` (ver más abajo) y refiérela con `[Anexo A](#anexo-a)`. Narra en tercera persona y en pasado (quién dijo/propuso/acordó qué), con cifras y fechas en **negrita**. Escribe prosa, no transcripción. Acuerdos de flujo paso a paso van como lista numerada. Cierra con `### **N. Cierre**`.
 5. `## CONCLUSIONES` — viñetas con las decisiones adoptadas; marca lo pendiente de validación como **Pendiente de validación técnica:** o similar.
 6. `## COMPROMISOS` — la tabla confirmada en el paso 2.
 7. `## FIRMA DEL ACTA` — tabla de dos columnas (Representante del Cliente / Representante de Blacksip) con tres líneas `&nbsp;<br>` de espacio para firma y debajo nombre y cargo; pregunta quiénes firman si no es evidente.
 8. Tabla `**AUTOR**` con `Versión | Nombre | Fecha envío | Observaciones`: versión `1.0` (o la siguiente si es revisión), autor = el usuario (Jose Ochoa por defecto), fecha de envío = hoy (`YYYY-MM-DD`), observaciones = fuentes usadas (p. ej. "Consolidado de notas de Gemini y Granola").
+
+9. `## ANEXOS` (solo si hay tablas informativas): un `### Anexo X. Título` por anexo seguido de su tabla markdown, después de la tabla Autor. Ver el anexo de ejemplo en `references/acta-modelo.md`.
 
 Usa español. Respeta tildes y los nombres propios tal como aparecen en las notas.
 
