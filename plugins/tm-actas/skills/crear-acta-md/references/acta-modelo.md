@@ -82,7 +82,7 @@ Se advirtió que las respuestas de usuarios a correos de tickets cerrados pueden
 
 ### **7. Casos pendientes de validación**
 
-Existen **30 casos desplegados en producción** en estado "pendiente validar", sin reporte de falla posterior. Se acordó cerrarlos todos.
+Existen **30 casos desplegados en producción** en estado "pendiente validar", sin reporte de falla posterior. Se acordó cerrarlos todos; el detalle por antigüedad está en el [Anexo A](#anexo-a).
 
 ### **8. Cierre**
 
@@ -121,3 +121,13 @@ María López creará el formulario y enviará el acta junto con el video de la 
 | :-- | :-- | :-- | :-- |
 | **Versión** | **Nombre** | **Fecha envío** | **Observaciones** |
 | 1.0 | María López | 2026-01-15 | Consolidado de notas de Gemini y Granola |
+
+## ANEXOS
+
+### Anexo A. Casos pendientes por antigüedad
+
+| Antigüedad | Casos | Acción |
+| :-- | :-- | :-- |
+| Menos de 15 días | 12 | Seguimiento normal |
+| 15 a 30 días | 10 | Contactar a la persona usuaria |
+| Más de 30 días | 8 | Cierre automático |

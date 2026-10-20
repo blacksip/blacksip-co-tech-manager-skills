@@ -13,11 +13,18 @@ Copia la plantilla de Drive y escribe en ella el contenido del acta `.md`, conse
 python3 <directorio-de-esta-skill>/scripts/md_to_gdoc.py actas/YYYYMMDD-acta-<tema>.md
 ```
 
+**Ejecútalo siempre desde la raíz del proyecto donde está `actas/`** (ruta `actas/…md`): `gws --upload` solo acepta archivos dentro del directorio actual y las imágenes viven en `actas/adjuntos/<acta>/`.
+
 `<directorio-de-esta-skill>` es la carpeta donde está este `SKILL.md` (el "directorio base" que informa el cliente al cargar la skill); el script vive en su subcarpeta `scripts/`. Funciona igual en Claude Code (plugin) y en opencode.
 
-Opciones: `--folder <id>` (por defecto la copia queda en la carpeta de la plantilla), `--name "<título>"` (por defecto `YYYY-MM-DD - Acta <Número de acta> - <Asunto antes de ":">` (el número se copia tal cual del campo "Número de acta", sea `20261002-01` o un consecutivo como `12`; si el campo está vacío se omite). Empezar por la fecha hace que el orden alfabético sea también cronológico), `--template <id>` (por defecto la plantilla de BlackSip).
+Opciones: `--folder <id>` (por defecto la copia queda en la carpeta de la plantilla), `--name "<título>"` (por defecto `YYYY-MM-DD - Acta <Número de acta> - <Asunto antes de ":">` (el número se copia tal cual del campo "Número de acta", sea `20261002-01` o un consecutivo como `12`; si el campo está vacío se omite). Empezar por la fecha hace que el orden alfabético sea también cronológico), `--template <id>` (por defecto la plantilla de BlackSip), `--imagenes incrustar|enlaces|ninguna` (por defecto `incrustar`).
 
 El script imprime la URL del documento. Entrégasela al usuario.
+
+## Imágenes y anexos
+
+- **Imágenes** (`![alt](ruta)` en su propia línea): se incrustan en su punto del desarrollo. Para eso el script sube cada imagen a la carpeta de Drive `adjuntos-actas-temp` (la crea si no existe) como `<acta>-NN-nombre.jpg`, la abre unos segundos a "cualquiera con el enlace", la inserta (queda copiada dentro del Doc) y **siempre** cierra el permiso y borra el temporal, aun si falla. **Antes de ejecutar, si el acta tiene imágenes, pide confirmación al usuario** de esa exposición temporal; si no confirma, usa `--imagenes enlaces` (deja el texto `[Imagen: …]`) o `ninguna`. Si el dominio rechaza compartir, o la imagen queda fuera del directorio actual, esa imagen queda como texto y se avisa; el Doc se crea igual. Si quedara algún resto, estará en `adjuntos-actas-temp` con el nombre del acta.
+- **Anexos** (`## ANEXOS` con `### Anexo X. Título` + tabla): se insertan al final del Doc, tras Autor, en una página nueva con el título «ANEXOS» y una tabla real por anexo. Las referencias `[Anexo A](#anexo-a)` del cuerpo son enlaces internos. Una tabla suelta en el desarrollo se mueve sola a un anexo nuevo y el script avisa.
 
 ## Antes de ejecutar
 
@@ -40,4 +47,4 @@ Verifica visualmente: exporta a PDF y míralo (`gws drive files export --params 
 
 - Depende de la estructura actual de la plantilla (tablas y posiciones de celdas fijas en `build()`). Si el equipo cambia la plantilla, hay que ajustar los índices de tabla/fila/columna allí.
 - Las horas largas (`10:00 am`) se parten en dos líneas por el ancho de la celda de la plantilla.
-- Solo soporta párrafos, listas numeradas y con viñetas, negrita y cursiva; tablas dentro del desarrollo no se convierten.
+- Solo soporta párrafos, listas numeradas y con viñetas, negrita y cursiva; las tablas se convierten como anexos (sin celdas combinadas ni formato por celda) y las imágenes solo dentro del desarrollo.
